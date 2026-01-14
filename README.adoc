@@ -1,218 +1,96 @@
-= RSR Template Repository
-
-image:[Palimpsest-MPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"] image:[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-licence"]
-:toc:
+= DotMatrix-FilePrinter (Enhanced Suite)
+:author: Jonathan D.A. Jewell
+:revnumber: 2026.01.14
+:doctype: book
+:toc: macro
 :sectnums:
+:icons: font
 
-// Badges
-image:https://img.shields.io/badge/RSR-Infrastructure-cd7f32[RSR Infrastructure]
-image:https://img.shields.io/badge/Phase-Maintenance-brightgreen[Phase]
-image:https://img.shields.io/badge/Guix-Primary-purple?logo=gnu[Guix]
+[abstract]
+A Neurosymbolic approach to filesystem manipulation. This tool treats the filesystem as a 24-pin dot-matrix substrate for deterministic, byte-level injection, eliminating encoding drift and NBSP contamination.
 
-== Overview
+toc::[]
 
-**The canonical template for RSR (Rhodium Standard Repository) projects.**
+== 1. Philosophy: The Physical Byte
+This suite treats the filesystem not as a collection of high-level abstractions, but as a physical tape where every bit is a mechanical strike. By utilizing a **Forth Kernel** as the primary "Print Head," we ensure that the **physical byte is the ultimate source of truth.**
 
-This repository provides the standardized structure, configuration, and tooling for all 139 repos in the hyperpolymath ecosystem. Use it to:
+* **Neural Layer:** `rescript-tea` + `cadre-tea-router` (Visualising intent and routing).
+* **Symbolic Layer:** `Nickel` (Defining the declarative contract and metadata).
+* **Physical Layer:** `Forth` (Stack-based deterministic execution).
+* **Bridge Layer:** `rescript-tauri-ffi` (Type-safe OS-level integration).
 
-* Bootstrap new projects with RSR compliance
-* Reference the standard directory structure
-* Copy configuration templates (justfile, STATE.scm, etc.)
+== 2. Technical Stack & Requirements
 
-== Quick Start
+The suite is built for cross-platform stability (Linux, Minix, macOS, iOS, Android, and PC).
+
+* **Orchestration:** `just` (strictly no `make`).
+* **Configuration:** `Nickel` (exporting to Forth/JSON).
+* **Frontend:** `ReScript` + `rescript-tea`.
+* **Backend:** `Tauri (Rust)` + `Gforth`.
+* **Verification:** `hexdump` + `grep` (Binary verification).
+
+== 3. Must-Just-Nickel Workflow
+
+All automation is managed via `just`. The following recipes are defined in the `justfile`.
 
 [source,bash]
 ----
-# Clone the template
-git clone https://github.com/hyperpolymath/RSR-template-repo my-project
-cd my-project
+# Default: Full Neurosymbolic Strike
+just all
 
-# Remove template git history
-rm -rf .git
-git init
+# Physical Strike: Injects bytes via Forth Kernel
+# Usage: just strike "104,101,108,108,111"
+just strike <bytes>
 
-# Customize
-sed -i 's/RSR-template-repo/my-project/g' justfile guix.scm README.adoc
+# Verification: Prove the substrate is ASCII-clean (no 0xA0)
+just verify <target_file>
 
-# Enter development environment
-guix shell -D -f guix.scm
-
-# Validate compliance
-just validate-rsr
+# Deploy: Package as a Podman container
+just deploy
 ----
 
-== What's Included
+== 4. Component Architecture
 
-[cols="1,3"]
+=== 4.1 The Forth Kernel (`kernel/striker.fth`)
+The "Print Head" logic. It processes the stack into a vertical 24-pin alignment.
+
+=== 4.2 The TEA UI (`src/App.res`)
+Uses `rescript-tea` to provide a real-time monitor of the Forth stack and the "Inking" path on the substrate grid.
+
+=== 4.3 Nickel Contracts (`config/meta.ncl`)
+Symbolic constraints that prevent "Neural Drift." It ensures no byte > 127 is ever passed to the physical striker.
+
+== 5. Multi-Shell Registry
+
+While the primary logic resides in the `justfile` and `bash` wrappers, the suite provides native shims for 18+ shells in `bin/references/`.
+
+[cols="1,2,2"]
 |===
-|File/Directory |Purpose
+| Shell Type | Reference Script | Context
 
-|`.editorconfig`
-|Editor configuration (indent, charset)
-
-|`.gitignore`
-|Standard ignore patterns
-
-|`.guix-channel`
-|Guix channel definition
-
-|`.well-known/`
-|RFC-compliant metadata (security.txt, ai.txt, humans.txt)
-
-|`docs/`
-|Documentation directory
-
-|`guix.scm`
-|Guix package definition
-
-|`justfile`
-|Task runner with 50+ recipes
-
-|`LICENSE.txt`
-|AGPL + Palimpsest dual license
-
-|`README.adoc`
-|This file
-
-|`RSR_COMPLIANCE.adoc`
-|Compliance tracking
-
-|`STATE.scm`
-|Project state checkpoint
+| **Bash** | `bin/strike.sh` | Primary/README Default
+| **Powershell-Core** | `bin/references/strike.ps1` | PC/Windows Substrates
+| **Minix Shell** | `bin/references/strike.sh` | Minimalist
 |===
 
-== Justfile Features
+== 6. Deployment & Edge Tech
 
-The template justfile provides:
+Following a **nerdctl-first** commitment, the suite is containerized for deterministic behavior across different host substrates. For **ASICs** or **Edge tech**, the Forth kernel is compiled into a standalone binary using `gforth` cross-compilation.
 
-* **~10 billion recipe combinations** via matrix recipes
-* **Cookbook generation**: `just cookbook` → `docs/just-cookbook.adoc`
-* **Man page generation**: `just man` → `docs/man/project.1`
-* **RSR validation**: `just validate-rsr`
-* **STATE.scm management**: `just state-touch`, `just state-phase`
-* **Container support**: `just container-build`, `just container-push`
-* **CI matrix**: `just ci-matrix [stage] [depth]`
+[IMPORTANT]
+If you require a build automation change, update the `justfile` and the `Cookbook.adoc`.
 
-=== Key Recipes
+== 7. Verification Proofs
+
+To verify a strike, do not use `cat` or `nano`. Use the physical truth:
 
 [source,bash]
 ----
-just                # Show all recipes
-just help <recipe>  # Detailed help
-just info           # Project info
-just combinations   # Show matrix options
-
-just build          # Build (debug)
-just test           # Run tests
-just quality        # Format + lint + test
-just ci             # Full CI pipeline
-
-just validate       # RSR + STATE validation
-just docs           # Generate all docs
-just cookbook       # Generate justfile docs
-
-just guix-shell     # Guix dev environment
-just container-build # Build container
+hexdump -C dist/substrate.bin
 ----
 
-== Directory Structure
+---
 
-[source]
+== 8. Appendix: Cookbook
+See `Cookbook.adoc` for a full list of physical strike patterns and Forth-stack operation mappings.
 ----
-project/
-├── .editorconfig          # Editor settings
-├── .gitignore             # Git ignore
-├── .guix-channel          # Guix channel
-├── .well-known/           # RFC metadata
-│   ├── ai.txt
-│   ├── humans.txt
-│   └── security.txt
-├── config/                # Nickel configs (optional)
-├── docs/                  # Documentation
-│   ├── generated/
-│   ├── man/
-│   └── just-cookbook.adoc
-├── guix.scm               # Guix package
-├── justfile               # Task runner
-├── LICENSE.txt            # Dual license
-├── README.adoc            # Overview
-├── RSR_COMPLIANCE.adoc    # Compliance
-├── src/                   # Source code
-├── STATE.scm              # State checkpoint
-└── tests/                 # Tests
-----
-
-== RSR Compliance
-
-=== Language Tiers
-
-* **Tier 1** (Gold): Rust, Elixir, Zig, Ada, Haskell, ReScript
-* **Tier 2** (Silver): Nickel, Racket, Guile Scheme, Nix
-* **Infrastructure**: Guix channels, derivations
-
-=== Required Files
-
-* `.editorconfig`
-* `.gitignore`
-* `justfile`
-* `README.adoc`
-* `RSR_COMPLIANCE.adoc`
-* `LICENSE.txt` (AGPL + Palimpsest)
-* `.well-known/security.txt`
-* `.well-known/ai.txt`
-* `.well-known/humans.txt`
-* `guix.scm` OR `flake.nix`
-
-=== Prohibited
-
-* Python outside `salt/` directory
-* TypeScript/JavaScript (use ReScript)
-* CUE (use Guile/Nickel)
-* `Dockerfile` (use `Containerfile`)
-
-== STATE.scm
-
-The STATE.scm file tracks project state:
-
-[source,scheme]
-----
-(define state
-  `((metadata
-     (project . "my-project")
-     (updated . "2025-12-10"))
-    (position
-     (phase . implementation)  ; design|implementation|testing|maintenance|archived
-     (maturity . beta))        ; experimental|alpha|beta|production|lts
-    (ecosystem
-     (part-of . ("RSR Framework"))
-     (depends-on . ()))))
-----
-
-== Badge Schema
-
-Generate badges from STATE.scm:
-
-[source,bash]
-----
-just badges standard
-----
-
-See `docs/BADGE_SCHEMA.adoc` for the full badge taxonomy.
-
-== Ecosystem Integration
-
-This template is part of:
-
-* **STATE.scm Ecosystem**: Conversation checkpoints
-* **RSR Framework**: Repository standards
-* **Consent-Aware-HTTP**: .well-known compliance
-
-== License
-
-SPDX-License-Identifier: `AGPL-3.0-or-later OR LicenseRef-Palimpsest-0.5`
-
-== Links
-
-* https://github.com/hyperpolymath/elegant-STATE[elegant-STATE] - STATE.scm tooling
-* https://github.com/hyperpolymath/conative-gating[conative-gating] - Policy enforcement
-* https://rhodium.sh[Rhodium Standard] - RSR documentation
