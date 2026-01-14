@@ -1,0 +1,28 @@
+\ Dot-Matrix File Striker Kernel (The Physical Truth)
+\ Treats the filesystem as a 24-pin vertical substrate
+
+VARIABLE f_handle
+
+: valid-byte? ( b -- b )
+    DUP 127 > IF DROP 32 THEN  \ ASCII Guard (No UTF-8 drift)
+    DUP 160 = IF DROP 32 THEN  \ NBSP Guard (0xA0)
+;
+
+: strike-init ( c-addr u -- ) 
+    W/O CREATE-FILE THROW f_handle ! ;
+
+: strike-byte ( b -- )
+    valid-byte?
+    PAD C! PAD 1 f_handle @ WRITE-FILE THROW ;
+
+: strike-sequence ( addr n -- )
+    0 DO
+        DUP I + C@ strike-byte
+    LOOP DROP ;
+
+: strike-close
+    f_handle @ CLOSE-FILE THROW ;
+
+\ Stack-based vertical 24-pin emulation (3 bytes per column)
+: strike-column ( b1 b2 b3 -- )
+    strike-byte strike-byte strike-byte ;
