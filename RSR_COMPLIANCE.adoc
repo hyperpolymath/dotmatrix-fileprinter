@@ -1,0 +1,9 @@
+= RSR Compliance: DotMatrix-FilePrinter
+:tier: infrastructure
+
+== Standards
+* **Justfile:** Follows RSR Canonical Template.
+* **Orchestration:** No `make` permitted.
+* **State:** Managed via `STATE.scm`.
+* **Substrate:** 7-bit ASCII strict.
+* **Verification:** `hexdump` verification required for all strikes.
