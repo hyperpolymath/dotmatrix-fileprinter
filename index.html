@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
+    <title>DotMatrix-FilePrinter</title>
+    <meta name="description" content="Neurosymbolic filesystem manipulation via Forth kernel" />
+
+    <style>
+      /* Critical CSS - Phosphor theme base */
+      :root {
+        --bg-primary: #0a0a0a;
+        --bg-secondary: #111;
+        --fg-primary: #33ff33;
+        --fg-secondary: #00cc00;
+        --fg-muted: #339933;
+        --danger: #ff3333;
+        --warning: #ffcc00;
+        --font-mono: 'IBM Plex Mono', 'Fira Code', 'Consolas', monospace;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html, body {
+        height: 100%;
+        background: var(--bg-primary);
+        color: var(--fg-primary);
+        font-family: var(--font-mono);
+        font-size: 14px;
+      }
+
+      .shell {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .shell__header {
+        padding: 1rem;
+        border-bottom: 1px solid var(--fg-muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .shell__title {
+        font-size: 1.2rem;
+        font-weight: normal;
+      }
+
+      .shell__main {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        overflow: auto;
+      }
+
+      .shell__footer {
+        padding: 0.5rem 1rem;
+        border-top: 1px solid var(--fg-muted);
+        font-size: 0.85rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .panel {
+        background: var(--bg-secondary);
+        border: 1px solid var(--fg-muted);
+      }
+
+      .panel__header {
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid var(--fg-muted);
+        font-weight: bold;
+      }
+
+      .panel__body {
+        padding: 1rem;
+      }
+
+      .input {
+        width: 100%;
+        background: var(--bg-primary);
+        color: var(--fg-primary);
+        border: 1px solid var(--fg-muted);
+        font-family: inherit;
+        font-size: inherit;
+        padding: 0.5rem;
+      }
+
+      .input:focus {
+        outline: none;
+        border-color: var(--fg-primary);
+      }
+
+      .input--textarea {
+        min-height: 150px;
+        resize: vertical;
+      }
+
+      .btn {
+        background: transparent;
+        color: var(--fg-primary);
+        border: 1px solid var(--fg-primary);
+        padding: 0.5rem 1rem;
+        font-family: inherit;
+        font-size: inherit;
+        cursor: pointer;
+      }
+
+      .btn:hover:not(:disabled) {
+        background: var(--fg-primary);
+        color: var(--bg-primary);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn--primary {
+        background: var(--fg-primary);
+        color: var(--bg-primary);
+      }
+
+      .btn--primary:hover:not(:disabled) {
+        background: var(--fg-secondary);
+      }
+
+      .actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .target-path {
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .target-path input {
+        flex: 1;
+      }
+
+      .bytes-preview {
+        margin-top: 1rem;
+        padding: 0.5rem;
+        background: var(--bg-primary);
+        border: 1px dashed var(--fg-muted);
+        font-size: 0.9rem;
+      }
+
+      .bytes-preview code {
+        color: var(--fg-secondary);
+      }
+
+      .hex-viewer {
+        background: var(--bg-primary);
+        padding: 1rem;
+        overflow-x: auto;
+        font-size: 0.85rem;
+        white-space: pre;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .alert {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border: 1px solid;
+      }
+
+      .alert--danger {
+        border-color: var(--danger);
+        color: var(--danger);
+      }
+
+      .alert ul {
+        margin: 0.5rem 0 0 1.5rem;
+      }
+
+      .badge {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        margin-left: 0.5rem;
+      }
+
+      .badge--success {
+        color: var(--fg-primary);
+        border: 1px solid var(--fg-primary);
+      }
+
+      .badge--danger {
+        color: var(--danger);
+        border: 1px solid var(--danger);
+      }
+
+      .status {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .status__dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .status--ok { color: var(--fg-primary); }
+      .status--warning { color: var(--warning); }
+      .status--error { color: var(--danger); }
+
+      #error {
+        display: none;
+        margin: 0 1rem;
+      }
+
+      #preview-panel,
+      #verify-panel {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="shell__header">
+        <h1 class="shell__title">DotMatrix-FilePrinter</h1>
+        <span id="gforth-status" class="status status--warning">
+          <span class="status__dot"></span>Gforth: Checking...
+        </span>
+      </header>
+
+      <div id="error" class="alert alert--danger"></div>
+
+      <main class="shell__main">
+        <div class="left-panel">
+          <div class="panel">
+            <div class="panel__header">Input</div>
+            <div class="panel__body">
+              <textarea
+                id="input"
+                class="input input--textarea"
+                placeholder="Enter text to convert to bytes, or comma-separated byte values (e.g., 72, 101, 108, 108, 111)"
+              ></textarea>
+
+              <div id="bytes-preview" class="bytes-preview" style="display: none;"></div>
+
+              <div class="target-path">
+                <label for="target-path">Target:</label>
+                <input
+                  type="text"
+                  id="target-path"
+                  class="input"
+                  value="dist/substrate.bin"
+                />
+              </div>
+
+              <div class="actions">
+                <button id="parse-btn" class="btn" disabled>Parse</button>
+                <button id="preview-btn" class="btn" disabled>Preview</button>
+                <button id="strike-btn" class="btn btn--primary" disabled>Strike Substrate</button>
+                <button id="verify-btn" class="btn" disabled>Verify</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-panel">
+          <div id="preview-panel" class="panel"></div>
+          <div id="verify-panel" class="panel" style="margin-top: 1rem;"></div>
+        </div>
+      </main>
+
+      <footer class="shell__footer">
+        <span id="status">Initializing...</span>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

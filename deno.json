@@ -1,0 +1,44 @@
+{
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+  "name": "@hyperpolymath/dotmatrix-fileprinter",
+  "version": "1.0.0",
+  "tasks": {
+    "dev": "deno run -A npm:vite --host",
+    "build": "deno run -A npm:rescript && deno run -A npm:vite build",
+    "build:res": "deno run -A npm:rescript",
+    "build:vite": "deno run -A npm:vite build",
+    "preview": "deno run -A npm:vite preview",
+    "check": "deno run -A npm:rescript format src/*.res && deno run -A npm:rescript",
+    "tauri:dev": "deno task build:res && cargo tauri dev",
+    "tauri:build": "deno task build && cargo tauri build",
+    "test:forth": "gforth kernel/striker.fth -e 'test-strike bye'",
+    "verify": "hexdump -C dist/substrate.bin"
+  },
+  "imports": {
+    "@tauri-apps/api": "npm:@tauri-apps/api@^2",
+    "@tauri-apps/plugin-dialog": "npm:@tauri-apps/plugin-dialog@^2",
+    "@tauri-apps/plugin-fs": "npm:@tauri-apps/plugin-fs@^2",
+    "@tauri-apps/plugin-shell": "npm:@tauri-apps/plugin-shell@^2",
+    "rescript": "npm:rescript@^12.0.0",
+    "@rescript/core": "npm:@rescript/core@^1.6.0",
+    "@rescript/runtime": "npm:@rescript/runtime@^12.0.0",
+    "vite": "npm:vite@^6.0.0"
+  },
+  "compilerOptions": {
+    "lib": ["deno.window", "dom", "dom.iterable"],
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  },
+  "nodeModulesDir": "auto",
+  "lint": {
+    "include": ["src/"],
+    "rules": {
+      "tags": ["recommended"]
+    }
+  },
+  "fmt": {
+    "include": ["src/"],
+    "indentWidth": 2,
+    "singleQuote": false
+  }
+}

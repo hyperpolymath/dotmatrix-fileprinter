@@ -1,39 +1,26 @@
-open Tea.App
-open Tea.Html
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// DotMatrix-FilePrinter - App module
+// Exports functions for the UI layer
+// Uses proven library for formally verified safety operations
 
-type state = {
-  substrate: array<int>,
-  headPosition: int,
-  isStriking: bool,
-}
+// Re-export bindings for JavaScript consumption
+let checkGforth = Bindings.checkGforth
+let previewStrike = Bindings.previewStrike
+let executeStrike = Bindings.executeStrike
+let verifySubstrate = Bindings.verifySubstrate
 
-type action =
-  | SetSubstrate(array<int>)
-  | StepHead
-  | ExecuteStrike
+// Utilities (powered by proven library)
+let stringToBytes = Bindings.stringToBytes
+let bytesToString = Bindings.bytesToString
+let parseByteString = Bindings.parseByteString
+let isValidByte = Bindings.isValidByte
+let isValidPath = Bindings.isValidPath
+let bytesToHex = Bindings.bytesToHex
+let bytesToHexCompact = Bindings.bytesToHexCompact
+let hexToBytes = Bindings.hexToBytes
 
-let init = () => ({substrate: [], headPosition: 0, isStriking: false}, Tea.Cmd.none)
-
-let update = (model, action) => {
-  match action {
-  | SetSubstrate(bytes) => ({...model, substrate: bytes}, Tea.Cmd.none)
-  | StepHead => ({...model, headPosition: model.headPosition + 1}, Tea.Cmd.none)
-  | ExecuteStrike => 
-      // Bridge to Tauri FFI
-      Bindings.strike(model.substrate)
-      (model, Tea.Cmd.none)
-  }
-}
-
-let view = (model) => {
-  div([class("dot-matrix-ui")], [
-    h1([], [text("DotMatrix-FilePrinter")]),
-    div([class("grid")], [
-      model.substrate->Array.mapWithIndex((byte, i) => {
-        let active = i == model.headPosition ? "active" : ""
-        span([class(active)], [text(byte->Int.toString)])
-      })->Array.toArray->span([], _)
-    ]),
-    button([onClick(ExecuteStrike)], [text("STRIKE SUBSTRATE")])
-  ])
-}
+// Constraint values for UI
+let maxByte = Types.Constraints.maxByte
+let forbiddenNbsp = Types.Constraints.forbiddenNbsp
+let forbiddenUtf8 = Types.Constraints.forbiddenUtf8
+let forbiddenBytes = Types.Constraints.forbiddenBytes
