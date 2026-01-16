@@ -35,6 +35,8 @@ let bytesToHexCompact = Bindings.bytesToHexCompact;
 
 let hexToBytes = Bindings.hexToBytes;
 
+let decodeHex = Bindings.hexToBytes;
+
 export {
   checkGforth,
   previewStrike,
@@ -48,6 +50,7 @@ export {
   bytesToHex,
   bytesToHexCompact,
   hexToBytes,
+  decodeHex,
   maxByte,
   forbiddenNbsp,
   forbiddenUtf8,

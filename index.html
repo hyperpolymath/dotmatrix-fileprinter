@@ -9,16 +9,22 @@
     <meta name="description" content="Neurosymbolic filesystem manipulation via Forth kernel" />
 
     <style>
-      /* Critical CSS - Phosphor theme base */
+      /* Phosphor Green Terminal Theme */
       :root {
         --bg-primary: #0a0a0a;
         --bg-secondary: #111;
+        --bg-tertiary: #1a1a1a;
         --fg-primary: #33ff33;
         --fg-secondary: #00cc00;
         --fg-muted: #339933;
+        --fg-dim: #226622;
         --danger: #ff3333;
         --warning: #ffcc00;
+        --info: #33ccff;
         --font-mono: 'IBM Plex Mono', 'Fira Code', 'Consolas', monospace;
+        --border-radius: 4px;
+        --transition-fast: 0.15s ease;
+        --transition-medium: 0.3s ease;
       }
 
       * {
@@ -35,6 +41,7 @@
         font-size: 14px;
       }
 
+      /* Main shell layout */
       .shell {
         height: 100%;
         display: flex;
@@ -47,11 +54,24 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
       }
 
       .shell__title {
         font-size: 1.2rem;
         font-weight: normal;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .shell__title::before {
+        content: ">";
+        animation: blink 1s step-end infinite;
+      }
+
+      @keyframes blink {
+        50% { opacity: 0; }
       }
 
       .shell__main {
@@ -63,6 +83,12 @@
         overflow: auto;
       }
 
+      @media (max-width: 900px) {
+        .shell__main {
+          grid-template-columns: 1fr;
+        }
+      }
+
       .shell__footer {
         padding: 0.5rem 1rem;
         border-top: 1px solid var(--fg-muted);
@@ -70,23 +96,38 @@
         display: flex;
         gap: 1rem;
         align-items: center;
+        justify-content: space-between;
+        background: var(--bg-secondary);
       }
 
+      /* Panels */
       .panel {
         background: var(--bg-secondary);
         border: 1px solid var(--fg-muted);
+        border-radius: var(--border-radius);
+        transition: border-color var(--transition-fast);
+      }
+
+      .panel:focus-within {
+        border-color: var(--fg-primary);
       }
 
       .panel__header {
         padding: 0.5rem 1rem;
         border-bottom: 1px solid var(--fg-muted);
         font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--bg-tertiary);
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
       }
 
       .panel__body {
         padding: 1rem;
       }
 
+      /* Input controls */
       .input {
         width: 100%;
         background: var(--bg-primary);
@@ -95,18 +136,68 @@
         font-family: inherit;
         font-size: inherit;
         padding: 0.5rem;
+        border-radius: var(--border-radius);
+        transition: all var(--transition-fast);
       }
 
       .input:focus {
         outline: none;
         border-color: var(--fg-primary);
+        box-shadow: 0 0 8px rgba(51, 255, 51, 0.2);
       }
 
       .input--textarea {
-        min-height: 150px;
+        min-height: 120px;
         resize: vertical;
+        line-height: 1.5;
       }
 
+      .input::placeholder {
+        color: var(--fg-dim);
+      }
+
+      /* Mode selector tabs */
+      .mode-selector {
+        display: flex;
+        gap: 0;
+        margin-bottom: 1rem;
+        border: 1px solid var(--fg-muted);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+      }
+
+      .mode-selector__btn {
+        flex: 1;
+        background: var(--bg-primary);
+        color: var(--fg-muted);
+        border: none;
+        padding: 0.5rem;
+        font-family: inherit;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+      }
+
+      .mode-selector__btn:not(:last-child) {
+        border-right: 1px solid var(--fg-muted);
+      }
+
+      .mode-selector__btn:hover {
+        background: var(--bg-tertiary);
+        color: var(--fg-secondary);
+      }
+
+      .mode-selector__btn--active {
+        background: var(--fg-muted);
+        color: var(--bg-primary);
+      }
+
+      .mode-selector__btn--active:hover {
+        background: var(--fg-secondary);
+        color: var(--bg-primary);
+      }
+
+      /* Buttons */
       .btn {
         background: transparent;
         color: var(--fg-primary);
@@ -115,25 +206,47 @@
         font-family: inherit;
         font-size: inherit;
         cursor: pointer;
+        border-radius: var(--border-radius);
+        transition: all var(--transition-fast);
+        position: relative;
+        overflow: hidden;
       }
 
       .btn:hover:not(:disabled) {
         background: var(--fg-primary);
         color: var(--bg-primary);
+        transform: translateY(-1px);
+      }
+
+      .btn:active:not(:disabled) {
+        transform: translateY(0);
       }
 
       .btn:disabled {
-        opacity: 0.5;
+        opacity: 0.4;
         cursor: not-allowed;
       }
 
       .btn--primary {
         background: var(--fg-primary);
         color: var(--bg-primary);
+        font-weight: bold;
       }
 
       .btn--primary:hover:not(:disabled) {
-        background: var(--fg-secondary);
+        background: #44ff44;
+        box-shadow: 0 0 12px rgba(51, 255, 51, 0.4);
+      }
+
+      .btn--small {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.85rem;
+      }
+
+      .btn__shortcut {
+        font-size: 0.7rem;
+        opacity: 0.7;
+        margin-left: 0.5rem;
       }
 
       .actions {
@@ -143,6 +256,7 @@
         flex-wrap: wrap;
       }
 
+      /* Target path input */
       .target-path {
         margin-top: 1rem;
         display: flex;
@@ -150,63 +264,173 @@
         gap: 0.5rem;
       }
 
+      .target-path label {
+        white-space: nowrap;
+        color: var(--fg-muted);
+      }
+
       .target-path input {
         flex: 1;
       }
 
+      /* Bytes preview */
       .bytes-preview {
         margin-top: 1rem;
-        padding: 0.5rem;
+        padding: 0.75rem;
         background: var(--bg-primary);
         border: 1px dashed var(--fg-muted);
+        border-radius: var(--border-radius);
         font-size: 0.9rem;
       }
 
       .bytes-preview code {
         color: var(--fg-secondary);
+        word-break: break-all;
       }
 
-      .hex-viewer {
-        background: var(--bg-primary);
-        padding: 1rem;
-        overflow-x: auto;
+      .bytes-preview__count {
+        color: var(--fg-muted);
         font-size: 0.85rem;
-        white-space: pre;
+        margin-bottom: 0.5rem;
+      }
+
+      /* Hex editor view */
+      .hex-editor {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        background: var(--bg-primary);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+      }
+
+      .hex-editor__header {
+        display: grid;
+        grid-template-columns: 80px 1fr 160px;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        background: var(--bg-tertiary);
+        color: var(--fg-muted);
+        border-bottom: 1px solid var(--fg-muted);
+      }
+
+      .hex-editor__body {
         max-height: 300px;
         overflow-y: auto;
+        overflow-x: hidden;
       }
 
+      .hex-editor__row {
+        display: grid;
+        grid-template-columns: 80px 1fr 160px;
+        gap: 1rem;
+        padding: 0.25rem 1rem;
+        border-bottom: 1px solid var(--bg-tertiary);
+        transition: background var(--transition-fast);
+      }
+
+      .hex-editor__row:hover {
+        background: var(--bg-tertiary);
+      }
+
+      .hex-editor__address {
+        color: var(--fg-dim);
+      }
+
+      .hex-editor__bytes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .hex-editor__byte {
+        width: 2ch;
+        text-align: center;
+        transition: all var(--transition-fast);
+      }
+
+      .hex-editor__byte--contaminated {
+        color: var(--danger);
+        font-weight: bold;
+      }
+
+      .hex-editor__byte--gap {
+        margin-right: 0.5rem;
+      }
+
+      .hex-editor__ascii {
+        color: var(--fg-muted);
+        letter-spacing: 0.1em;
+      }
+
+      .hex-editor__ascii span {
+        display: inline-block;
+        width: 1ch;
+        text-align: center;
+      }
+
+      .hex-editor__ascii span.non-printable {
+        color: var(--fg-dim);
+      }
+
+      /* Alerts and status */
       .alert {
         padding: 1rem;
         margin-bottom: 1rem;
         border: 1px solid;
+        border-radius: var(--border-radius);
+        animation: alertIn 0.2s ease;
+      }
+
+      @keyframes alertIn {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
       }
 
       .alert--danger {
         border-color: var(--danger);
         color: var(--danger);
+        background: rgba(255, 51, 51, 0.1);
+      }
+
+      .alert--success {
+        border-color: var(--fg-primary);
+        color: var(--fg-primary);
+        background: rgba(51, 255, 51, 0.1);
+      }
+
+      .alert--info {
+        border-color: var(--info);
+        color: var(--info);
+        background: rgba(51, 204, 255, 0.1);
       }
 
       .alert ul {
         margin: 0.5rem 0 0 1.5rem;
       }
 
+      /* Badges */
       .badge {
         font-size: 0.75rem;
         padding: 0.2rem 0.5rem;
-        margin-left: 0.5rem;
+        border-radius: 2px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
 
       .badge--success {
         color: var(--fg-primary);
         border: 1px solid var(--fg-primary);
+        background: rgba(51, 255, 51, 0.1);
       }
 
       .badge--danger {
         color: var(--danger);
         border: 1px solid var(--danger);
+        background: rgba(255, 51, 51, 0.1);
       }
 
+      /* Status indicators */
       .status {
         display: flex;
         align-items: center;
@@ -218,11 +442,19 @@
         height: 8px;
         border-radius: 50%;
         background: currentColor;
+        animation: pulse 2s ease infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
       }
 
       .status--ok { color: var(--fg-primary); }
+      .status--ok .status__dot { animation: none; }
       .status--warning { color: var(--warning); }
       .status--error { color: var(--danger); }
+      .status--error .status__dot { animation: none; }
 
       #error {
         display: none;
@@ -232,6 +464,137 @@
       #preview-panel,
       #verify-panel {
         display: none;
+        animation: panelIn 0.3s ease;
+      }
+
+      @keyframes panelIn {
+        from { opacity: 0; transform: translateX(8px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+
+      /* Help panel */
+      .help-panel {
+        position: fixed;
+        right: -400px;
+        top: 0;
+        bottom: 0;
+        width: 400px;
+        max-width: 100vw;
+        background: var(--bg-secondary);
+        border-left: 1px solid var(--fg-muted);
+        z-index: 100;
+        transition: right var(--transition-medium);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .help-panel--open {
+        right: 0;
+      }
+
+      .help-panel__header {
+        padding: 1rem;
+        border-bottom: 1px solid var(--fg-muted);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: var(--bg-tertiary);
+      }
+
+      .help-panel__body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      .help-panel__section {
+        margin-bottom: 1.5rem;
+      }
+
+      .help-panel__section h3 {
+        color: var(--fg-primary);
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      .help-panel__section p,
+      .help-panel__section li {
+        color: var(--fg-muted);
+        font-size: 0.85rem;
+        line-height: 1.6;
+      }
+
+      .help-panel__section ul {
+        margin-left: 1.5rem;
+      }
+
+      .help-panel__kbd {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        margin: 0.25rem 0;
+      }
+
+      .help-panel__kbd kbd {
+        background: var(--bg-primary);
+        border: 1px solid var(--fg-muted);
+        padding: 0.1rem 0.4rem;
+        border-radius: 3px;
+        font-family: inherit;
+        font-size: 0.8rem;
+      }
+
+      .help-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+        opacity: 0;
+        visibility: hidden;
+        transition: all var(--transition-medium);
+      }
+
+      .help-overlay--visible {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* Keyboard shortcuts hint */
+      .shortcuts-hint {
+        color: var(--fg-dim);
+        font-size: 0.8rem;
+      }
+
+      /* Footer layout */
+      .footer-left {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+
+      .footer-right {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      /* Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: var(--bg-primary);
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: var(--fg-dim);
+        border-radius: 4px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--fg-muted);
       }
     </style>
   </head>
@@ -249,12 +612,22 @@
       <main class="shell__main">
         <div class="left-panel">
           <div class="panel">
-            <div class="panel__header">Input</div>
+            <div class="panel__header">
+              <span>Input</span>
+              <button id="help-btn" class="btn btn--small" title="Help (?)">?</button>
+            </div>
             <div class="panel__body">
+              <div class="mode-selector" role="tablist">
+                <button id="mode-text" class="mode-selector__btn mode-selector__btn--active" role="tab" aria-selected="true">Text</button>
+                <button id="mode-hex" class="mode-selector__btn" role="tab" aria-selected="false">Hex</button>
+                <button id="mode-bytes" class="mode-selector__btn" role="tab" aria-selected="false">Bytes</button>
+              </div>
+
               <textarea
                 id="input"
                 class="input input--textarea"
-                placeholder="Enter text to convert to bytes, or comma-separated byte values (e.g., 72, 101, 108, 108, 111)"
+                placeholder="Type text here..."
+                aria-label="Input data"
               ></textarea>
 
               <div id="bytes-preview" class="bytes-preview" style="display: none;"></div>
@@ -266,14 +639,23 @@
                   id="target-path"
                   class="input"
                   value="dist/substrate.bin"
+                  aria-label="Target file path"
                 />
               </div>
 
               <div class="actions">
-                <button id="parse-btn" class="btn" disabled>Parse</button>
-                <button id="preview-btn" class="btn" disabled>Preview</button>
-                <button id="strike-btn" class="btn btn--primary" disabled>Strike Substrate</button>
-                <button id="verify-btn" class="btn" disabled>Verify</button>
+                <button id="parse-btn" class="btn" disabled>
+                  Parse<span class="btn__shortcut">⏎</span>
+                </button>
+                <button id="preview-btn" class="btn" disabled>
+                  Preview<span class="btn__shortcut">Ctrl+P</span>
+                </button>
+                <button id="strike-btn" class="btn btn--primary" disabled>
+                  Strike<span class="btn__shortcut">Ctrl+⏎</span>
+                </button>
+                <button id="verify-btn" class="btn" disabled>
+                  Verify<span class="btn__shortcut">Ctrl+V</span>
+                </button>
               </div>
             </div>
           </div>
@@ -286,9 +668,78 @@
       </main>
 
       <footer class="shell__footer">
-        <span id="status">Initializing...</span>
+        <div class="footer-left">
+          <span id="status">Initializing...</span>
+        </div>
+        <div class="footer-right">
+          <span class="shortcuts-hint">Press <kbd>?</kbd> for help</span>
+        </div>
       </footer>
     </div>
+
+    <!-- Help panel -->
+    <div id="help-overlay" class="help-overlay"></div>
+    <aside id="help-panel" class="help-panel">
+      <div class="help-panel__header">
+        <span>Help</span>
+        <button id="help-close" class="btn btn--small">×</button>
+      </div>
+      <div class="help-panel__body">
+        <div class="help-panel__section">
+          <h3>Input Modes</h3>
+          <ul>
+            <li><strong>Text:</strong> Enter plain text (converts to ASCII bytes)</li>
+            <li><strong>Hex:</strong> Enter hex pairs like "48 65 6c 6c 6f" or "48656c6c6f"</li>
+            <li><strong>Bytes:</strong> Enter comma-separated decimals like "72, 101, 108, 108, 111"</li>
+          </ul>
+        </div>
+
+        <div class="help-panel__section">
+          <h3>Keyboard Shortcuts</h3>
+          <div class="help-panel__kbd">
+            <kbd>Enter</kbd> Parse input
+          </div>
+          <div class="help-panel__kbd">
+            <kbd>Ctrl</kbd>+<kbd>P</kbd> Preview strike
+          </div>
+          <div class="help-panel__kbd">
+            <kbd>Ctrl</kbd>+<kbd>Enter</kbd> Execute strike
+          </div>
+          <div class="help-panel__kbd">
+            <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>V</kbd> Verify substrate
+          </div>
+          <div class="help-panel__kbd">
+            <kbd>?</kbd> Toggle help panel
+          </div>
+          <div class="help-panel__kbd">
+            <kbd>Esc</kbd> Close help panel
+          </div>
+        </div>
+
+        <div class="help-panel__section">
+          <h3>Byte Constraints</h3>
+          <p>Valid bytes: 0-127 (ASCII)</p>
+          <p>Forbidden bytes: 160 (NBSP), 194 (UTF-8 marker)</p>
+          <p>These constraints ensure clean substrate files.</p>
+        </div>
+
+        <div class="help-panel__section">
+          <h3>Safety Features</h3>
+          <ul>
+            <li>Path traversal protection (no .. or ~)</li>
+            <li>Formally verified math operations</li>
+            <li>Constant-time hex comparison</li>
+            <li>Contamination detection</li>
+          </ul>
+        </div>
+
+        <div class="help-panel__section">
+          <h3>About</h3>
+          <p>DotMatrix-FilePrinter uses a Forth kernel to write bytes directly to files, bypassing OS text encoding layers.</p>
+          <p>Powered by the <strong>proven</strong> library for formally verified safety.</p>
+        </div>
+      </div>
+    </aside>
 
     <script type="module" src="/src/main.js"></script>
   </body>

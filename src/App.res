@@ -19,6 +19,9 @@ let bytesToHex = Bindings.bytesToHex
 let bytesToHexCompact = Bindings.bytesToHexCompact
 let hexToBytes = Bindings.hexToBytes
 
+// For hex input mode
+let decodeHex = Bindings.hexToBytes
+
 // Constraint values for UI
 let maxByte = Types.Constraints.maxByte
 let forbiddenNbsp = Types.Constraints.forbiddenNbsp
