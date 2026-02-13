@@ -1,0 +1,45 @@
+set shell := ["bash", "-c"]
+
+ncl_url := "https://github.com/nickel-lang/nickel/releases/download/v1.8.0/nickel-x86_64-linux"
+ncl_bin := "./dist/nickel"
+
+# Strike the config using the Dot-Matrix Byte-Head
+strike:
+    @mkdir -p config dist
+    @echo "Striking config/meta.ncl..."
+    @deno eval "const bytes = new Uint8Array([ \
+        108, 101, 116, 32, 109, 101, 116, 97, 100, 97, 116, 97, 32, 61, 32, 123, 10, \
+        32, 32, 110, 97, 109, 101, 32, 61, 32, 34, 77, 121, 32, 83, 99, 114, 105, 112, 116, 34, 44, 10, \
+        32, 32, 118, 101, 114, 115, 10 i, 111, 110, 32, 61, 32, 34, 48, 46, 49, 46, 48, 34, 44, 10, \
+        32, 32, 109, 97, 116, 99, 104, 32, 61, 32, 91, 34, 42, 58, 47, 47, 42, 34, 93, 44, 10, \
+        32, 32, 103, 114, 97, 110, 116, 32, 61, 32, 91, 93, 10, \
+        125, 10 \
+    ]); Deno.writeFileSync('config/meta.ncl', bytes);"
+
+# Ensure Nickel binary exists
+get-nickel:
+    @if [ ! -f {{ncl_bin}} ]; then \
+        echo "Fetching Nickel binary..."; \
+        curl -L {{ncl_url}} -o {{ncl_bin}} && chmod +x {{ncl_bin}}; \
+    fi
+
+# Main build pipeline
+build: strike get-nickel
+    @echo "Exporting JSON from Nickel..."
+    @{{ncl_bin}} export --format json config/meta.ncl > dist/meta.json
+    @echo "Generating Userscript Header..."
+    @echo "// ==UserScript==" > dist/header.txt
+    @deno eval "const m = JSON.parse(Deno.readTextFileSync('dist/meta.json')); \
+                console.log('// @name ' + m.name); \
+                console.log('// @version ' + m.version); \
+                m.match.forEach(x => console.log('// @match ' + x));" >> dist/header.txt
+    @echo "// ==/UserScript==" >> dist/header.txt
+    @echo "Compiling ReScript..."
+    @deno run -A npm:rescript build
+    @echo "Bundling Userscript..."
+    @deno run -A npm:esbuild src/Main.bs.js --bundle --banner:js="$(cat dist/header.txt)" --outfile=dist/my-script.user.js
+    @echo "------------------------------------------------"
+    @echo "Success: dist/my-script.user.js"
+
+clean:
+    @rm -rf dist/
