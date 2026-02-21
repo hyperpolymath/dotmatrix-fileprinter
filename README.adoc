@@ -94,3 +94,8 @@ hexdump -C dist/substrate.bin
 == 8. Appendix: Cookbook
 See `Cookbook.adoc` for a full list of physical strike patterns and Forth-stack operation mappings.
 ----
+
+
+== Architecture
+
+See link:TOPOLOGY.md[TOPOLOGY.md] for a visual architecture map and completion dashboard.
