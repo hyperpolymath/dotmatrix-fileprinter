@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: PMPL-1.0-or-later
 // DotMatrix-FilePrinter - App module
 // Exports functions for the UI layer
 // Uses proven library for formally verified safety operations

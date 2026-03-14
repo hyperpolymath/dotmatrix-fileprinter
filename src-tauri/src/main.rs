@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: PMPL-1.0-or-later
 //! DotMatrix-FilePrinter Tauri Backend
 //!
 //! Bridge between the ReScript UI and the Forth kernel.
