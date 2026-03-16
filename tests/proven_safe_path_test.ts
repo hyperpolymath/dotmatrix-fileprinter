@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// SPDX-License-Identifier: PMPL-1.0-or-later
 // Tests for Proven_SafePath module
 
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
