@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "a91d512e-6537-5988-8332-517ef0bf28ca"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "dotmatrix-fileprinter"
+prefixed-name = "ap-dotmatrix-fileprinter"
+
+[clade]
+primary = "ap"
+secondary = []
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/dotmatrix-fileprinter"
+gitlab = "hyperpolymath/dotmatrix-fileprinter"
+bitbucket = "hyperpolymath/dotmatrix-fileprinter"
+
+[lineage]
+type = "standalone"
+parent = "Dot-matrix style file printer"
+born = "2026-03-16"
