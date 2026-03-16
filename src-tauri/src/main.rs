@@ -4,6 +4,7 @@
 //! Bridge between the ReScript UI and the Forth kernel.
 //! Handles byte validation, file operations, and Forth execution.
 
+#![forbid(unsafe_code)]
 use serde::{Deserialize, Serialize};
 use std::fs::{self, File};
 use std::io::Write;
