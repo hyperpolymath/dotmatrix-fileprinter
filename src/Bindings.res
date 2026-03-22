@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
-// Tauri FFI Bindings for DotMatrix-FilePrinter
+// Backend FFI Bindings for DotMatrix-FilePrinter
 // Uses proven library for formally verified safety operations
+// Uses RuntimeBridge for Gossamer/Tauri/browser dispatch
 
-// Core Tauri API
-@module("@tauri-apps/api/core")
-external invoke: (string, 'a) => promise<'b> = "invoke"
+// Core backend API — delegates to RuntimeBridge for runtime detection
+let invoke = RuntimeBridge.invoke
 
 // Re-export types
 type contaminant = Types.contaminant
