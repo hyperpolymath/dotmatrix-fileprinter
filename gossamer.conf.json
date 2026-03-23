@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "identifier": "com.hyperpolymath.dotmatrix-fileprinter",
   "build": {
-    "frontendDist": "../dist",
+    "frontendDist": "./dist",
     "devUrl": "http://localhost:5173",
     "beforeDevCommand": "deno task dev",
     "beforeBuildCommand": "deno task build"

@@ -134,7 +134,7 @@ module Dialog = {
   external tauriSaveRaw: JSON.t => promise<Nullable.t<JSON.t>> = "save"
 
   /// Open a file picker dialog.
-  let open = (opts: JSON.t): promise<Nullable.t<JSON.t>> => {
+  let \"open" = (opts: JSON.t): promise<Nullable.t<JSON.t>> => {
     if isGossamerRuntime() {
       gossamerInvoke("__gossamer_dialog_open", opts)
     } else if isTauriRuntime() {

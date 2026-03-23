@@ -17,7 +17,7 @@ This suite treats the filesystem not as a collection of high-level abstractions,
 * **Neural Layer:** `rescript-tea` + `cadre-tea-router` (Visualising intent and routing).
 * **Symbolic Layer:** `Nickel` (Defining the declarative contract and metadata).
 * **Physical Layer:** `Forth` (Stack-based deterministic execution).
-* **Bridge Layer:** `rescript-tauri-ffi` (Type-safe OS-level integration).
+* **Bridge Layer:** `gossamer-rs` + `RuntimeBridge.res` (Type-safe OS-level integration).
 
 == 2. Technical Stack & Requirements
 
@@ -26,7 +26,7 @@ The suite is built for cross-platform stability (Linux, Minix, macOS, iOS, Andro
 * **Orchestration:** `just` (strictly no `make`).
 * **Configuration:** `Nickel` (exporting to Forth/JSON).
 * **Frontend:** `ReScript` + `rescript-tea`.
-* **Backend:** `Tauri (Rust)` + `Gforth`.
+* **Backend:** `Gossamer (Rust)` + `Gforth`.
 * **Verification:** `hexdump` + `grep` (Binary verification).
 
 == 3. Must-Just-Nickel Workflow

@@ -22,7 +22,7 @@ The following files in `.machine_readable/` contain structured project metadata:
 | **ReScript** | Primary application code | Compiles to JS, type-safe |
 | **Deno** | Runtime & package management | Replaces Node/npm/bun |
 | **Rust** | Performance-critical, systems, WASM | Preferred for CLI tools |
-| **Tauri 2.0+** | Mobile apps (iOS/Android) | Rust backend + web UI |
+| **Gossamer** | Desktop webview shell | Rust backend + web UI (replaces Tauri) |
 | **Dioxus** | Mobile apps (native UI) | Pure Rust, React-like |
 | **Gleam** | Backend services | Runs on BEAM or compiles to JS |
 | **Bash/POSIX Shell** | Scripts, automation | Keep minimal |
@@ -44,16 +44,16 @@ The following files in `.machine_readable/` contain structured project metadata:
 | pnpm/yarn | Deno |
 | Go | Rust |
 | Python | Julia/Rust/ReScript |
-| Java/Kotlin | Rust/Tauri/Dioxus |
-| Swift | Tauri/Dioxus |
-| React Native | Tauri/Dioxus |
-| Flutter/Dart | Tauri/Dioxus |
+| Java/Kotlin | Rust/Gossamer/Dioxus |
+| Swift | Gossamer/Dioxus |
+| React Native | Gossamer/Dioxus |
+| Flutter/Dart | Gossamer/Dioxus |
 
 ### Mobile Development
 
 **No exceptions for Kotlin/Swift** - use Rust-first approach:
 
-1. **Tauri 2.0+** - Web UI (ReScript) + Rust backend, MIT/Apache-2.0
+1. **Gossamer** - Web UI (ReScript) + Rust backend via gossamer-rs, PMPL-1.0-or-later
 2. **Dioxus** - Pure Rust native UI, MIT/Apache-2.0
 
 Both are FOSS with independent governance (no Big Tech).
@@ -65,7 +65,7 @@ Both are FOSS with independent governance (no Big Tech).
 3. **No node_modules in production** - Deno caches deps automatically
 4. **No Go code** - Use Rust instead
 5. **No Python anywhere** - Use Julia for data/batch, Rust for systems, ReScript for apps
-6. **No Kotlin/Swift for mobile** - Use Tauri 2.0+ or Dioxus
+6. **No Kotlin/Swift for mobile** - Use Gossamer or Dioxus
 
 ### Package Management
 
