@@ -80,3 +80,8 @@ htmlcov/
 
 # Crash recovery artifacts
 ai-cli-crash-capture/
+
+# ReScript/OCaml compiler artifacts
+*.cmt
+*.cmti
+*.cmi
