@@ -7,6 +7,8 @@ set dotenv-load := true
 set positional-arguments := true
 
 # Project metadata
+import? "contractile.just"
+
 project := "dotmatrix-fileprinter"
 version := "1.0.0"
 tier := "infrastructure"
