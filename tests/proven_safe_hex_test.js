@@ -9,13 +9,9 @@ import {
 // Import the compiled ReScript module
 import * as SafeHex from "../src/proven/Proven_SafeHex.res.js";
 
-// Helper to check Result type - uses unknown to handle varying payload types
-function isOk<T>(result: { TAG: string; _0: unknown }): result is { TAG: "Ok"; _0: T } {
+// Helper to check Result type
+function isOk(result) {
   return result.TAG === "Ok";
-}
-
-function isError<E>(result: { TAG: string; _0: unknown }): result is { TAG: "Error"; _0: E } {
-  return result.TAG === "Error";
 }
 
 // ============ encode tests ============

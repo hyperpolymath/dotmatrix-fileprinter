@@ -11,6 +11,7 @@
     "check": "deno run -A npm:rescript format src/*.res && deno run -A npm:rescript",
     "gossamer:dev": "deno task build:res && cargo run",
     "gossamer:build": "deno task build && cargo build --release",
+    "test": "deno task build:res && deno test --allow-read tests/",
     "test:forth": "gforth kernel/striker.fth -e 'test-strike bye'",
     "verify": "hexdump -C dist/substrate.bin"
   },

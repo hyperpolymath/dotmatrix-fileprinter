@@ -10,7 +10,7 @@ import {
 import * as SafeString from "../src/proven/Proven_SafeString.res.js";
 
 // Helper to check Result type
-function isOk<T>(result: { TAG: string; _0: T }): result is { TAG: "Ok"; _0: T } {
+function isOk(result) {
   return result.TAG === "Ok";
 }
 

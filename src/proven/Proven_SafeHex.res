@@ -179,11 +179,8 @@ let decodeToString = (hexStr: string): result<string, hexError> => {
   switch decode(hexStr) {
   | Error(e) => Error(e)
   | Ok(bytes) =>
-    let result = ref("")
-    Array.forEach(bytes, byte => {
-      result := result.contents ++ String.fromCharCode(byte)
-    })
-    Ok(result.contents)
+    let chars = Array.map(bytes, byte => String.fromCharCode(byte))
+    Ok(Array.join(chars, ""))
   }
 }
 
@@ -353,25 +350,29 @@ let xorHex = (hexA: string, hexB: string): result<string, hexError> => {
  * Example: [72, 101, 108] -> "48 65 6c"
  */
 let encodeSpaced = (bytes: array<int>): result<string, hexError> => {
-  if Array.length(bytes) == 0 {
+  let length = Array.length(bytes)
+  if length == 0 {
     Ok("")
   } else {
-    let parts = ref([])
+    let parts = Array.make(~length, "")
     let valid = ref(true)
 
-    Array.forEach(bytes, byte => {
-      if valid.contents && byte >= 0 && byte <= 255 {
-        let high = Int.Bitwise.lsr(byte, 4)
-        let low = Int.Bitwise.land(byte, 0x0f)
-        let hex = String.charAt(hexChars, high) ++ String.charAt(hexChars, low)
-        parts := Array.concat(parts.contents, [hex])
-      } else {
-        valid := false
+    for i in 0 to length - 1 {
+      if valid.contents {
+        let byte = Array.getUnsafe(bytes, i)
+        if byte >= 0 && byte <= 255 {
+          let high = Int.Bitwise.lsr(byte, 4)
+          let low = Int.Bitwise.land(byte, 0x0f)
+          let hex = String.charAt(hexChars, high) ++ String.charAt(hexChars, low)
+          Array.setUnsafe(parts, i, hex)
+        } else {
+          valid := false
+        }
       }
-    })
+    }
 
     if valid.contents {
-      Ok(Array.join(parts.contents, " "))
+      Ok(Array.join(parts, " "))
     } else {
       Error(InvalidCharacter)
     }
@@ -383,25 +384,29 @@ let encodeSpaced = (bytes: array<int>): result<string, hexError> => {
  * Example: [72, 101, 108] -> "48 65 6C"
  */
 let encodeSpacedUppercase = (bytes: array<int>): result<string, hexError> => {
-  if Array.length(bytes) == 0 {
+  let length = Array.length(bytes)
+  if length == 0 {
     Ok("")
   } else {
-    let parts = ref([])
+    let parts = Array.make(~length, "")
     let valid = ref(true)
 
-    Array.forEach(bytes, byte => {
-      if valid.contents && byte >= 0 && byte <= 255 {
-        let high = Int.Bitwise.lsr(byte, 4)
-        let low = Int.Bitwise.land(byte, 0x0f)
-        let hex = String.charAt(hexCharsUpper, high) ++ String.charAt(hexCharsUpper, low)
-        parts := Array.concat(parts.contents, [hex])
-      } else {
-        valid := false
+    for i in 0 to length - 1 {
+      if valid.contents {
+        let byte = Array.getUnsafe(bytes, i)
+        if byte >= 0 && byte <= 255 {
+          let high = Int.Bitwise.lsr(byte, 4)
+          let low = Int.Bitwise.land(byte, 0x0f)
+          let hex = String.charAt(hexCharsUpper, high) ++ String.charAt(hexCharsUpper, low)
+          Array.setUnsafe(parts, i, hex)
+        } else {
+          valid := false
+        }
       }
-    })
+    }
 
     if valid.contents {
-      Ok(Array.join(parts.contents, " "))
+      Ok(Array.join(parts, " "))
     } else {
       Error(InvalidCharacter)
     }

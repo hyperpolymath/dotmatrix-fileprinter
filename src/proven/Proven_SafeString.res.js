@@ -59,7 +59,7 @@ function fromCodePoints(codes) {
   }
   let valid = true;
   let errorIdx = 0;
-  let result = "";
+  let chars = Core__Array.make(length, "");
   for (let i = 0; i < length; ++i) {
     if (valid) {
       let code = codes[i];
@@ -67,14 +67,14 @@ function fromCodePoints(codes) {
         valid = false;
         errorIdx = i;
       } else {
-        result = result + String.fromCharCode(code);
+        chars[i] = String.fromCharCode(code);
       }
     }
   }
   if (valid) {
     return {
       TAG: "Ok",
-      _0: result
+      _0: chars.join("")
     };
   } else {
     return {
