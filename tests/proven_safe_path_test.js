@@ -57,6 +57,11 @@ Deno.test("SafePath.isSafe - empty path is safe", () => {
   assertEquals(SafePath.isSafe(""), true);
 });
 
+Deno.test("SafePath.isSafe - null bytes are unsafe", () => {
+  assertEquals(SafePath.isSafe("foo\x00bar"), false);
+  assertEquals(SafePath.isSafe("\x00"), false);
+});
+
 // ============ sanitizeFilename tests ============
 
 Deno.test("SafePath.sanitizeFilename - removes traversal sequences", () => {

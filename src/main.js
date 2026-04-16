@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: PMPL-1.0-or-later
 // DotMatrix-FilePrinter - Main Entry Point
 
+import "./styles/shell.css";
 import "./styles/main.css";
 import * as App from "./App.res.js";
 
@@ -375,18 +376,16 @@ function clearError() {
 
 function updateGforthStatus() {
   if (gforthStatusEl) {
+    const dot = '<span class="status__dot"></span>';
     if (state.gforthAvailable === null) {
       gforthStatusEl.className = "status status--warning";
-      gforthStatusEl.innerHTML =
-        '<span class="status__dot"></span>Gforth: Checking...';
+      gforthStatusEl.innerHTML = dot + "Gforth: Checking...";
     } else if (state.gforthAvailable) {
       gforthStatusEl.className = "status status--ok";
-      gforthStatusEl.innerHTML =
-        '<span class="status__dot"></span>Gforth: Ready';
+      gforthStatusEl.innerHTML = dot + "Gforth: Ready";
     } else {
       gforthStatusEl.className = "status status--error";
-      gforthStatusEl.innerHTML =
-        '<span class="status__dot"></span>Gforth: Not Found';
+      gforthStatusEl.innerHTML = dot + "Gforth: Not Found";
     }
   }
 }
@@ -493,7 +492,7 @@ function updatePreviewPanel() {
             ${r.contaminants
               .map(
                 (c) =>
-                  `<li>Position ${c.position}: 0x${c.value.toString(16).toUpperCase()} (${c.value}) - ${c.description}</li>`
+                  `<li>Position ${escapeHtml(c.position)}: 0x${escapeHtml(c.value.toString(16).toUpperCase())} (${escapeHtml(c.value)}) - ${escapeHtml(c.description)}</li>`
               )
               .join("")}
           </ul>
@@ -510,7 +509,7 @@ function updatePreviewPanel() {
       <div class="panel__body">
         ${contaminantsHtml}
         ${hexEditor}
-        <p style="margin-top: 1rem; color: var(--fg-muted);">${r.byte_count} bytes ready to strike</p>
+        <p style="margin-top: 1rem; color: var(--fg-muted);">${escapeHtml(r.byte_count)} bytes ready to strike</p>
       </div>
     `;
     previewPanel.style.display = "block";
@@ -532,7 +531,7 @@ function updateVerifyPanel() {
             ${r.contaminants
               .map(
                 (c) =>
-                  `<li>Position ${c.position}: 0x${c.value.toString(16).toUpperCase()} (${c.value}) - ${c.description}</li>`
+                  `<li>Position ${escapeHtml(c.position)}: 0x${escapeHtml(c.value.toString(16).toUpperCase())} (${escapeHtml(c.value)}) - ${escapeHtml(c.description)}</li>`
               )
               .join("")}
           </ul>
@@ -577,6 +576,13 @@ function updateButtons() {
   if (previewBtn) previewBtn.disabled = !hasBytes || !hasGforth;
   if (strikeBtn) strikeBtn.disabled = !hasBytes || !hasGforth || !hasValidPath;
   if (verifyBtn) verifyBtn.disabled = !hasGforth || !hasValidPath;
+}
+
+// Sanitize text for safe HTML insertion (prevent XSS)
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.appendChild(document.createTextNode(String(str)));
+  return div.innerHTML;
 }
 
 // Start the app

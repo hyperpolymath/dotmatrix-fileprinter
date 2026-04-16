@@ -171,15 +171,10 @@ function decodeToString(hexStr) {
       _0: e._0
     };
   }
-  let result = {
-    contents: ""
-  };
-  e._0.forEach(byte => {
-    result.contents = result.contents + String.fromCharCode(byte);
-  });
+  let chars = e._0.map(byte => String.fromCharCode(byte));
   return {
     TAG: "Ok",
-    _0: result.contents
+    _0: chars.join("")
   };
 }
 
@@ -342,32 +337,32 @@ function xorHex(hexA, hexB) {
 }
 
 function encodeSpaced(bytes) {
-  if (bytes.length === 0) {
+  let length = bytes.length;
+  if (length === 0) {
     return {
       TAG: "Ok",
       _0: ""
     };
   }
-  let parts = {
-    contents: []
-  };
-  let valid = {
-    contents: true
-  };
-  bytes.forEach(byte => {
-    if (!(valid.contents && byte >= 0 && byte <= 255)) {
-      valid.contents = false;
-      return;
+  let parts = Core__Array.make(length, "");
+  let valid = true;
+  for (let i = 0; i < length; ++i) {
+    if (valid) {
+      let byte = bytes[i];
+      if (byte >= 0 && byte <= 255) {
+        let high = (byte >>> 4);
+        let low = byte & 15;
+        let hex = hexChars.charAt(high) + hexChars.charAt(low);
+        parts[i] = hex;
+      } else {
+        valid = false;
+      }
     }
-    let high = (byte >>> 4);
-    let low = byte & 15;
-    let hex = hexChars.charAt(high) + hexChars.charAt(low);
-    parts.contents = parts.contents.concat([hex]);
-  });
-  if (valid.contents) {
+  }
+  if (valid) {
     return {
       TAG: "Ok",
-      _0: parts.contents.join(" ")
+      _0: parts.join(" ")
     };
   } else {
     return {
@@ -378,32 +373,32 @@ function encodeSpaced(bytes) {
 }
 
 function encodeSpacedUppercase(bytes) {
-  if (bytes.length === 0) {
+  let length = bytes.length;
+  if (length === 0) {
     return {
       TAG: "Ok",
       _0: ""
     };
   }
-  let parts = {
-    contents: []
-  };
-  let valid = {
-    contents: true
-  };
-  bytes.forEach(byte => {
-    if (!(valid.contents && byte >= 0 && byte <= 255)) {
-      valid.contents = false;
-      return;
+  let parts = Core__Array.make(length, "");
+  let valid = true;
+  for (let i = 0; i < length; ++i) {
+    if (valid) {
+      let byte = bytes[i];
+      if (byte >= 0 && byte <= 255) {
+        let high = (byte >>> 4);
+        let low = byte & 15;
+        let hex = hexCharsUpper.charAt(high) + hexCharsUpper.charAt(low);
+        parts[i] = hex;
+      } else {
+        valid = false;
+      }
     }
-    let high = (byte >>> 4);
-    let low = byte & 15;
-    let hex = hexCharsUpper.charAt(high) + hexCharsUpper.charAt(low);
-    parts.contents = parts.contents.concat([hex]);
-  });
-  if (valid.contents) {
+  }
+  if (valid) {
     return {
       TAG: "Ok",
-      _0: parts.contents.join(" ")
+      _0: parts.join(" ")
     };
   } else {
     return {

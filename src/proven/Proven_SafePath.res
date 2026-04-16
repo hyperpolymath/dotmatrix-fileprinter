@@ -12,9 +12,24 @@ let hasTraversal = (path: string): bool => {
   String.startsWith(path, "/") && String.includes(path, "..")
 }
 
-/** Check if a path is safe (no traversal attacks) */
+/** Check if a path contains a null byte
+ *
+ * SECURITY: Null bytes can truncate paths in C-based filesystem APIs,
+ * allowing an attacker to bypass extension checks (e.g. "safe.txt\0.sh").
+ */
+let hasNullByte = (path: string): bool => {
+  String.includes(path, "\x00")
+}
+
+/** Check if a path is safe
+ *
+ * A path is safe if it:
+ * - contains no parent directory traversal (..)
+ * - contains no home directory expansion (~)
+ * - contains no null bytes
+ */
 let isSafe = (path: string): bool => {
-  !hasTraversal(path)
+  !hasTraversal(path) && !hasNullByte(path)
 }
 
 /** Sanitize a filename by removing dangerous characters */

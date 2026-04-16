@@ -11,8 +11,16 @@ function hasTraversal(path) {
   }
 }
 
+function hasNullByte(path) {
+  return path.includes("\x00");
+}
+
 function isSafe(path) {
-  return !hasTraversal(path);
+  if (hasTraversal(path)) {
+    return false;
+  } else {
+    return !path.includes("\x00");
+  }
 }
 
 function sanitizeFilename(filename) {
@@ -41,6 +49,7 @@ function safeJoin(base, parts) {
 
 export {
   hasTraversal,
+  hasNullByte,
   isSafe,
   sanitizeFilename,
   safeJoin,

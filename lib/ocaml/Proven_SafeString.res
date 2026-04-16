@@ -78,7 +78,7 @@ let fromCodePoints = (codes: array<int>): result<string, string> => {
   } else {
     let valid = ref(true)
     let errorIdx = ref(0)
-    let result = ref("")
+    let chars = Array.make(~length, "")
 
     for i in 0 to length - 1 {
       if valid.contents {
@@ -87,13 +87,13 @@ let fromCodePoints = (codes: array<int>): result<string, string> => {
           valid := false
           errorIdx := i
         } else {
-          result := result.contents ++ String.fromCharCode(code)
+          Array.setUnsafe(chars, i, String.fromCharCode(code))
         }
       }
     }
 
     if valid.contents {
-      Ok(result.contents)
+      Ok(Array.join(chars, ""))
     } else {
       Error(`Invalid code point at position ${Int.toString(errorIdx.contents)}`)
     }

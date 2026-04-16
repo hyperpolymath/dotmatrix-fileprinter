@@ -7,14 +7,14 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     watch: {
-      ignored: ['**/src-tauri/**', '**/kernel/**'],
+      ignored: ['**/target/**', '**/kernel/**'],
     },
   },
-  envPrefix: ['VITE_', 'TAURI_'],
+  envPrefix: ['VITE_', 'GOSSAMER_'],
   build: {
     target: 'esnext',
-    minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
-    sourcemap: !!process.env.TAURI_DEBUG,
+    minify: !process.env.GOSSAMER_DEBUG ? 'esbuild' : false,
+    sourcemap: !!process.env.GOSSAMER_DEBUG,
     outDir: 'dist',
     emptyOutDir: true,
   },
