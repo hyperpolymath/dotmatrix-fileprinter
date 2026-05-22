@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // Backend FFI Bindings for DotMatrix-FilePrinter
 // Uses proven library for formally verified safety operations
 // Uses RuntimeBridge for Gossamer/Tauri/browser dispatch

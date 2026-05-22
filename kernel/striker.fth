@@ -1,4 +1,4 @@
-\ SPDX-License-Identifier: PMPL-1.0-or-later
+\ SPDX-License-Identifier: MPL-2.0
 \ striker.fth - DotMatrix-FilePrinter Forth Kernel
 \ The "24-pin print head" for deterministic byte-level filesystem manipulation
 \ ============================================================================

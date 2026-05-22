@@ -53,7 +53,7 @@ The following files in `.machine_readable/` contain structured project metadata:
 
 **No exceptions for Kotlin/Swift** - use Rust-first approach:
 
-1. **Gossamer** - Web UI (ReScript) + Rust backend via gossamer-rs, PMPL-1.0-or-later
+1. **Gossamer** - Web UI (ReScript) + Rust backend via gossamer-rs, MPL-2.0
 2. **Dioxus** - Pure Rust native UI, MIT/Apache-2.0
 
 Both are FOSS with independent governance (no Big Tech).

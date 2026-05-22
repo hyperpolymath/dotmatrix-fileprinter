@@ -105,7 +105,7 @@
     ],
     "resources": ["kernel/*"],
     "copyright": "Copyright (c) 2026 Jonathan D.A. Jewell (hyperpolymath)",
-    "license": "PMPL-1.0-or-later",
+    "license": "MPL-2.0",
     "shortDescription": "Deterministic byte-level filesystem manipulation",
     "longDescription": "A neurosymbolic approach to filesystem manipulation using a Forth kernel as the physical print head for deterministic byte injection.",
     "linux": {

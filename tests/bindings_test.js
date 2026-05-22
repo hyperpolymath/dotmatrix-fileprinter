@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // Tests for Bindings utility functions
 // Note: This only tests utility functions, not Tauri IPC commands
 
