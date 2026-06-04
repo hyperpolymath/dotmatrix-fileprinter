@@ -1,3 +1,7 @@
+<!--
+SPDX-License-Identifier: MPL-2.0
+Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 # Post-audit Status Report: dotmatrix-fileprinter
 - **Date:** 2026-04-15
 - **Status:** Complete (M5 Sweep)
@@ -15,7 +19,7 @@
 - DOM manipulation (innerHTML/document.write) in src/main.js
 - 1 unsafe get calls in lib/ocaml/Proven_SafeString.res
 - 3 unsafe get calls in lib/ocaml/Proven_SafeHex.res
-- 14 TODO/FIXME/HACK markers in contractiles/k9/template-hunt.k9.ncl
+- 14 TODO/FIXME/HACK markers in contractiles/self-validating/template-hunt.k9.ncl
 - flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix
 - 1 import map entry/ies in deno.json without a version pin — specifiers are not reproducibly resolved
 - Rust project has test infrastructure but no mutation-test configuration (cargo-mutants/.cargo-mutants.toml) — add `cargo mutants` to verify test suite kills mutations
