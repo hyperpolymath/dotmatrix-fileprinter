@@ -1,42 +1,55 @@
-[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/hyperpolymath)
+<!--
+SPDX-License-Identifier: CC-BY-SA-4.0
+SPDX-FileCopyrightText: 2025-2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 
-= DotMatrix-FilePrinter (Enhanced Suite)
-:author: Jonathan D.A. Jewell
-:revnumber: 2026.01.14
-:doctype: book
-:toc: macro
-:sectnums:
-:icons: font
+A Neurosymbolic approach to filesystem manipulation. This tool treats
+the filesystem as a 24-pin dot-matrix substrate for deterministic,
+byte-level injection, eliminating encoding drift and NBSP contamination.
 
-[abstract]
-A Neurosymbolic approach to filesystem manipulation. This tool treats the filesystem as a 24-pin dot-matrix substrate for deterministic, byte-level injection, eliminating encoding drift and NBSP contamination.
+<div id="toc">
 
-toc::[]
+</div>
 
-== 1. Philosophy: The Physical Byte
-This suite treats the filesystem not as a collection of high-level abstractions, but as a physical tape where every bit is a mechanical strike. By utilizing a **Forth Kernel** as the primary "Print Head," we ensure that the **physical byte is the ultimate source of truth.**
+ 1. Philosophy: The Physical Byte
 
-* **Neural Layer:** `rescript-tea` + `cadre-tea-router` (Visualising intent and routing).
-* **Symbolic Layer:** `Nickel` (Defining the declarative contract and metadata).
-* **Physical Layer:** `Forth` (Stack-based deterministic execution).
-* **Bridge Layer:** `gossamer-rs` + `RuntimeBridge.res` (Type-safe OS-level integration).
+This suite treats the filesystem not as a collection of high-level
+abstractions, but as a physical tape where every bit is a mechanical
+strike. By utilizing a **Forth Kernel** as the primary "Print Head," we
+ensure that the **physical byte is the ultimate source of truth.**
 
-== 2. Technical Stack & Requirements
+- **Neural Layer:** `rescript-tea` + `cadre-tea-router` (Visualising
+  intent and routing).
 
-The suite is built for cross-platform stability (Linux, Minix, macOS, iOS, Android, and PC).
+- **Symbolic Layer:** `Nickel` (Defining the declarative contract and
+  metadata).
 
-* **Orchestration:** `just` (strictly no `make`).
-* **Configuration:** `Nickel` (exporting to Forth/JSON).
-* **Frontend:** `ReScript` + `rescript-tea`.
-* **Backend:** `Gossamer (Rust)` + `Gforth`.
-* **Verification:** `hexdump` + `grep` (Binary verification).
+- **Physical Layer:** `Forth` (Stack-based deterministic execution).
 
-== 3. Must-Just-Nickel Workflow
+- **Bridge Layer:** `gossamer-rs` + `RuntimeBridge.res` (Type-safe
+  OS-level integration).
 
-All automation is managed via `just`. The following recipes are defined in the `justfile`.
+ 2. Technical Stack & Requirements
 
-[source,bash]
-----
+The suite is built for cross-platform stability (Linux, Minix, macOS,
+iOS, Android, and PC).
+
+- **Orchestration:** `just` (strictly no `make`).
+
+- **Configuration:** `Nickel` (exporting to Forth/JSON).
+
+- **Frontend:** `ReScript` + `rescript-tea`.
+
+- **Backend:** `Gossamer` `(Rust)` + `Gforth`.
+
+- **Verification:** `hexdump` + `grep` (Binary verification).
+
+ 3. Must-Just-Nickel Workflow
+
+All automation is managed via `just`. The following recipes are defined
+in the `justfile`.
+
+```bash
 # Default: Full Neurosymbolic Strike
 just all
 
@@ -49,55 +62,62 @@ just verify <target_file>
 
 # Deploy: Package as a Podman container
 just deploy
-----
+```
 
-== 4. Component Architecture
+ 4. Component Architecture
 
-=== 4.1 The Forth Kernel (`kernel/striker.fth`)
-The "Print Head" logic. It processes the stack into a vertical 24-pin alignment.
+## 4.1 The Forth Kernel (`kernel/striker.fth`)
 
-=== 4.2 The TEA UI (`src/App.res`)
-Uses `rescript-tea` to provide a real-time monitor of the Forth stack and the "Inking" path on the substrate grid.
+The "Print Head" logic. It processes the stack into a vertical 24-pin
+alignment.
 
-=== 4.3 Nickel Contracts (`config/meta.ncl`)
-Symbolic constraints that prevent "Neural Drift." It ensures no byte > 127 is ever passed to the physical striker.
+## 4.2 The TEA UI (`src/App.res`)
 
-== 5. Multi-Shell Registry
+Uses `rescript-tea` to provide a real-time monitor of the Forth stack
+and the "Inking" path on the substrate grid.
 
-While the primary logic resides in the `justfile` and `bash` wrappers, the suite provides native shims for 18+ shells in `bin/references/`.
+## 4.3 Nickel Contracts (`config/meta.ncl`)
 
-[cols="1,2,2"]
-|===
-| Shell Type | Reference Script | Context
+Symbolic constraints that prevent "Neural Drift." It ensures no byte \>
+127 is ever passed to the physical striker.
 
-| **Bash** | `bin/strike.sh` | Primary/README Default
-| **Powershell-Core** | `bin/references/strike.ps1` | PC/Windows Substrates
-| **Minix Shell** | `bin/references/strike.sh` | Minimalist
-|===
+ 5. Multi-Shell Registry
 
-== 6. Deployment & Edge Tech
+While the primary logic resides in the `justfile` and `bash` wrappers,
+the suite provides native shims for 18+ shells in `bin/references/`.
 
-Following a **nerdctl-first** commitment, the suite is containerized for deterministic behavior across different host substrates. For **ASICs** or **Edge tech**, the Forth kernel is compiled into a standalone binary using `gforth` cross-compilation.
+| Shell Type          | Reference Script            | Context                |
+|---------------------|-----------------------------|------------------------|
+| **Bash**            | `bin/strike.sh`             | Primary/README Default |
+| **Powershell-Core** | `bin/references/strike.ps1` | PC/Windows Substrates  |
+| **Minix Shell**     | `bin/references/strike.sh`  | Minimalist             |
 
-[IMPORTANT]
-If you require a build automation change, update the `justfile` and the `Cookbook.adoc`.
+ 6. Deployment & Edge Tech
 
-== 7. Verification Proofs
+Following a **nerdctl-first** commitment, the suite is containerized for
+deterministic behavior across different host substrates. For **ASICs**
+or **Edge tech**, the Forth kernel is compiled into a standalone binary
+using `gforth` cross-compilation.
+
+If you require a build automation change, update the `justfile` and the
+`Cookbook.adoc`.
+
+ 7. Verification Proofs
 
 To verify a strike, do not use `cat` or `nano`. Use the physical truth:
 
-[source,bash]
-----
+```bash
 hexdump -C dist/substrate.bin
-----
+```
 
----
+------------------------------------------------------------------------
 
-== 8. Appendix: Cookbook
-See `Cookbook.adoc` for a full list of physical strike patterns and Forth-stack operation mappings.
-----
+ 8. Appendix: Cookbook
 
+See `Cookbook.adoc` for a full list of physical strike patterns and
+Forth-stack operation mappings. ----
 
-== Architecture
+ Architecture
 
-See link:TOPOLOGY.md[TOPOLOGY.md] for a visual architecture map and completion dashboard.
+See <a href="TOPOLOGY.md" class="md">TOPOLOGY</a> for a visual
+architecture map and completion dashboard.
