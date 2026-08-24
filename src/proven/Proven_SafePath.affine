@@ -4,10 +4,6 @@
 
 module Proven_SafePath;
 
-// TODO: Complete semantic implementation
-
-
-/* === ORIGINAL RESCRIPT IMPLEMENTATION ===
 // SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2025 Hyperpolymath
 
@@ -16,10 +12,10 @@ module Proven_SafePath;
  */
 
 /** Check if a path contains directory traversal sequences */
-let hasTraversal = (path: string): bool => {
-  String.includes(path, "..") ||
-  String.includes(path, "~") ||
-  String.startsWith(path, "/") && String.includes(path, "..")
+pub fn hasTraversal(path: String) -> Bool {
+  String::includes(path, "..") ||
+  String::includes(path, "~") ||
+  String::startsWith(path, "/") && String::includes(path, "..")
 }
 
 /** Check if a path contains a null byte
@@ -27,8 +23,8 @@ let hasTraversal = (path: string): bool => {
  * SECURITY: Null bytes can truncate paths in C-based filesystem APIs,
  * allowing an attacker to bypass extension checks (e.g. "safe.txt\0.sh").
  */
-let hasNullByte = (path: string): bool => {
-  String.includes(path, "\x00")
+pub fn hasNullByte(path: String) -> Bool {
+  String::includes(path, "\x00")
 }
 
 /** Check if a path is safe
@@ -38,30 +34,30 @@ let hasNullByte = (path: string): bool => {
  * - contains no home directory expansion (~)
  * - contains no null bytes
  */
-let isSafe = (path: string): bool => {
+pub fn isSafe(path: String) -> Bool {
   !hasTraversal(path) && !hasNullByte(path)
 }
 
 /** Sanitize a filename by removing dangerous characters */
-let sanitizeFilename = (filename: string): string => {
+pub fn sanitizeFilename(filename: String) -> String {
   filename
-  ->String.replaceRegExp(%re("/\\.\\./g"), "_")
-  ->String.replaceRegExp(%re("/[\\/\\\\]/g"), "_")
-  ->String.replaceRegExp(%re("/[\\x00-\\x1f]/g"), "")
-  ->String.replaceRegExp(%re("/[<>:\"\\|\\?\\*]/g"), "_")
+  ->String::replaceRegExp(%re("/\\.\\./g"), "_")
+  ->String::replaceRegExp(%re("/[\\/\\\\]/g"), "_")
+  ->String::replaceRegExp(%re("/[\\x00-\\x1f]/g"), "")
+  ->String::replaceRegExp(%re("/[<>:\"\\|\\?\\*]/g"), "_")
 }
 
 /** Safely join path components, rejecting traversal attempts */
-let safeJoin = (base: string, parts: array<string>): option<string> => {
-  let hasUnsafe = parts->Array.some(part => hasTraversal(part))
+pub fn safeJoin(base: String, parts: [String]) -> Option<String> {
+  let hasUnsafe = parts->Array::some(part => hasTraversal(part))
   if hasUnsafe {
     None
   } else {
-    let result = ref(base)
-    parts->Array.forEach(part => {
-      let sanitized = sanitizeFilename(part)
-      let base = result.contents
-      if String.endsWith(base, "/") {
+    let result = ref(base);
+    parts->Array::forEach(part => {
+      let sanitized = sanitizeFilename(part);
+      let base = result.contents;
+      if String::endsWith(base, "/") {
         result := base ++ sanitized
       } else {
         result := base ++ "/" ++ sanitized
@@ -70,5 +66,3 @@ let safeJoin = (base: string, parts: array<string>): option<string> => {
     Some(result.contents)
   }
 }
-
-======================================== */
