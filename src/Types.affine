@@ -1,7 +1,38 @@
 // SPDX-License-Identifier: MPL-2.0
-// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell
-// Ported via Harvard Engine bulk-processor
+// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath) <j.d.a.jewell@open.ac.uk>
+//
+// ReScript→AffineScript port of src/Types.res.
+// Refs hyperpolymath/standards#252 STEP 5 (tail batch); Refs affinescript#406.
+//
+// Scope: ports the 3 record types. The `module Constraints { ... }` nested
+// module from the .res original is DEFERRED — AS is one-module-per-file
+// (`module Name;` header), so nested-module-as-namespace requires either
+// flattening (`constraints_max_byte`, …) or a separate `Constraints.affine`.
+// Deferred to its own follow-up because `Constraints.isValidByte` calls
+// `Proven_SafeMath.inRangeExcluding` — porting that needs Proven_SafeMath.affine
+// first, which is 178 lines and warrants its own PR.
 
 module Types;
 
-// TODO: Complete semantic implementation
+/// Contaminant info
+pub struct Contaminant {
+  position: Int,
+  value: Int,
+  description: String
+}
+
+/// Preview result from backend
+pub struct PreviewResult {
+  hex_preview: String,
+  would_contaminate: Bool,
+  contaminants: [Contaminant],
+  byte_count: Int
+}
+
+/// Verify result from backend
+pub struct VerifyResult {
+  clean: Bool,
+  contaminants: [Contaminant],
+  hexdump: String,
+  size: Int
+}

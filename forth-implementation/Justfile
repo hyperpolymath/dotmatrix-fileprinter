@@ -43,3 +43,6 @@ build: strike get-nickel
 
 clean:
     @rm -rf dist/
+
+secret-scan-trufflehog:
+    @command -v trufflehog >/dev/null && trufflehog filesystem . --only-verified || true
