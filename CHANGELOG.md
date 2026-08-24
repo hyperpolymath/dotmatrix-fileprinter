@@ -1,7 +1,8 @@
 <!--
-SPDX-License-Identifier: MPL-2.0
-Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+SPDX-License-Identifier: CC-BY-SA-4.0
+SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell (hyperpolymath)
 -->
+
 # Changelog
 
 All notable changes to `dotmatrix-fileprinter` will be documented in this file.
@@ -37,8 +38,8 @@ this project aims to follow [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fix(ci): adopt canonical hypatia-scan.yml (env.HOME/scanner-layout + Comment-step gate) (#5)
 - fix(scorecard): enforce granular permissions and add fuzzing placeholder
 - fix(ci): Resolve workflow-linter self-matching and metadata issues
-- fix: global MPL-2.0 → MPL-2.0-or-later replacement
-- fix(license): SPDX AGPL-3.0 → MPL-2.0-or-later in dotfiles
+- fix: global AGPL-3.0-or-later → PMPL-1.0-or-later replacement
+- fix(license): SPDX AGPL-3.0 → PMPL-1.0-or-later in dotfiles
 - fix: remove duplicate SCM files from root
 
 ### Changed
