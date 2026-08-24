@@ -19,8 +19,13 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 - DOM manipulation (innerHTML/document.write) in src/main.js
 - 1 unsafe get calls in lib/ocaml/Proven_SafeString.res
 - 3 unsafe get calls in lib/ocaml/Proven_SafeHex.res
+<<<<<<< HEAD
 - 14 TODO/FIXME/HACK markers in contractiles/self-validating/template-hunt.k9.ncl
 - flake.nix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.nix
+=======
+- 14 TODO/FIXME/HACK markers in contractiles/k9/template-hunt.k9.ncl
+- flake.guix declares inputs without narHash, rev pinning, or sibling flake.lock — dependency revision is unpinned in flake.guix
+>>>>>>> d50974d (chore: global textual eradication of Nix and ReScript)
 - 1 import map entry/ies in deno.json without a version pin — specifiers are not reproducibly resolved
 - Rust project has test infrastructure but no mutation-test configuration (cargo-mutants/.cargo-mutants.toml) — add `cargo mutants` to verify test suite kills mutations
 

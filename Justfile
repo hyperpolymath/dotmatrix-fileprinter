@@ -32,7 +32,7 @@ info:
     @echo "Phase: $(just state-phase)"
     @echo ""
     @echo "Stack:"
-    @echo "  Neural:   ReScript + TEA"
+    @echo "  Neural:   AffineScript + TEA"
     @echo "  Symbolic: Nickel"
     @echo "  Physical: Forth (Gforth)"
     @echo "  Bridge:   Tauri 2.0 (Rust)"
@@ -56,12 +56,12 @@ dev:
     @echo "Starting development server..."
     @deno task dev
 
-# Build ReScript only
+# Build AffineScript only
 build-res:
-    @echo "Compiling Neural Layer (ReScript)..."
-    @deno run -A npm:rescript build
+    @echo "Compiling Neural Layer (AffineScript)..."
+    @deno run -A npm:affinescript build
 
-# Build frontend (ReScript + Vite)
+# Build frontend (AffineScript + Vite)
 build-frontend:
     @echo "Building frontend..."
     @deno task build
@@ -175,7 +175,7 @@ container-build:
 # Count lines of deterministic code
 loc:
     @echo "Lines of code by language:"
-    @echo "  ReScript: $(find . -name '*.res' -not -path './node_modules/*' | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
+    @echo "  AffineScript: $(find . -name '*.res' -not -path './node_modules/*' | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
     @echo "  Forth:    $(find . -name '*.fth' | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
     @echo "  Rust:     $(find . -name '*.rs' | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
     @echo "  Nickel:   $(find . -name '*.ncl' | xargs wc -l 2>/dev/null | tail -1 | awk '{print $1}')"
@@ -187,7 +187,7 @@ todos:
 # Clean build artifacts
 clean:
     @echo "Cleaning build artifacts..."
-    @rm -rf dist/ node_modules/ .rescript/
+    @rm -rf dist/ node_modules/ .affinescript/
     @rm -rf src-tauri/target/
     @rm -f kernel/data.fth test.bin
     @echo "Clean complete"
@@ -195,14 +195,14 @@ clean:
 # Format all code
 fmt:
     @echo "Formatting code..."
-    @deno run -A npm:rescript format src/*.res
+    @deno run -A npm:affinescript format src/*.res
     @cd src-tauri && cargo fmt
     @echo "Format complete"
 
 # Check types without building
 check:
     @echo "Type checking..."
-    @deno run -A npm:rescript build
+    @deno run -A npm:affinescript build
     @cd src-tauri && cargo check
     @echo "Type check complete"
 
@@ -237,7 +237,7 @@ doctor:
     check "git"               git       "2.40" 
     check "Rust (cargo)"      cargo     "1.80" 
     check "Deno"              deno      "2.0" 
-    check "ReScript (resc)"   rescript  "12.0" 
+    check "AffineScript (resc)"   affinescript  "12.0" 
     check "Zig"               zig       "0.13" 
 # Optional tools
 if command -v panic-attack >/dev/null 2>&1; then

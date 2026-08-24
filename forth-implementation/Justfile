@@ -34,8 +34,8 @@ build: strike get-nickel
                 console.log('// @version ' + m.version); \
                 m.match.forEach(x => console.log('// @match ' + x));" >> dist/header.txt
     @echo "// ==/UserScript==" >> dist/header.txt
-    @echo "Compiling ReScript..."
-    @deno run -A npm:rescript build
+    @echo "Compiling AffineScript..."
+    @deno run -A npm:affinescript build
     @echo "Bundling Userscript..."
     @deno run -A npm:esbuild src/Main.bs.js --bundle --banner:js="$(cat dist/header.txt)" --outfile=dist/my-script.user.js
     @echo "------------------------------------------------"
