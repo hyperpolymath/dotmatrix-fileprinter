@@ -4,10 +4,6 @@
 
 module Proven_SafeMath;
 
-// TODO: Complete semantic implementation
-
-
-/* === ORIGINAL RESCRIPT IMPLEMENTATION ===
 // SPDX-License-Identifier: MPL-2.0
 // SPDX-FileCopyrightText: 2025 Hyperpolymath
 
@@ -19,7 +15,7 @@ module Proven_SafeMath;
  */
 
 /** Safe division that returns None on division by zero */
-let div = (numerator: int, denominator: int): option<int> => {
+pub fn div(numerator: Int, denominator: Int) -> Option<Int> {
   if denominator == 0 {
     None
   } else {
@@ -28,15 +24,15 @@ let div = (numerator: int, denominator: int): option<int> => {
 }
 
 /** Safe division with default value */
-let divOr = (default: int, numerator: int, denominator: int): int => {
-  switch div(numerator, denominator) {
-  | Some(v) => v
-  | None => default
+pub fn divOr(default: Int, numerator: Int, denominator: Int) -> Int {
+  match div(numerator, denominator) {
+   Some(v) => v
+   None => default
   }
 }
 
 /** Safe modulo that returns None on division by zero */
-let safeMod = (numerator: int, denominator: int): option<int> => {
+pub fn safeMod(numerator: Int, denominator: Int) -> Option<Int> {
   if denominator == 0 {
     None
   } else {
@@ -45,8 +41,8 @@ let safeMod = (numerator: int, denominator: int): option<int> => {
 }
 
 /** Addition with overflow detection */
-let addChecked = (a: int, b: int): option<int> => {
-  let result = a + b
+pub fn addChecked(a: Int, b: Int) -> Option<Int> {
+  let result = a + b;
   // Check for overflow
   if (a > 0 && b > 0 && result < 0) || (a < 0 && b < 0 && result > 0) {
     None
@@ -56,8 +52,8 @@ let addChecked = (a: int, b: int): option<int> => {
 }
 
 /** Subtraction with underflow detection */
-let subChecked = (a: int, b: int): option<int> => {
-  let result = a - b
+pub fn subChecked(a: Int, b: Int) -> Option<Int> {
+  let result = a - b;
   // Check for underflow
   if (a > 0 && b < 0 && result < 0) || (a < 0 && b > 0 && result > 0) {
     None
@@ -67,11 +63,11 @@ let subChecked = (a: int, b: int): option<int> => {
 }
 
 /** Multiplication with overflow detection */
-let mulChecked = (a: int, b: int): option<int> => {
+pub fn mulChecked(a: Int, b: Int) -> Option<Int> {
   if a == 0 || b == 0 {
     Some(0)
   } else {
-    let result = a * b
+    let result = a * b;
     if result / a != b {
       None
     } else {
@@ -81,7 +77,7 @@ let mulChecked = (a: int, b: int): option<int> => {
 }
 
 /** Safe absolute value that handles MIN_INT correctly */
-let absSafe = (n: int): option<int> => {
+pub fn absSafe(n: Int) -> Option<Int> {
   if n == min_int {
     None
   } else if n < 0 {
@@ -92,7 +88,7 @@ let absSafe = (n: int): option<int> => {
 }
 
 /** Clamp a value to range [lo, hi] */
-let clamp = (lo: int, hi: int, value: int): int => {
+pub fn clamp(lo: Int, hi: Int, value: Int) -> Int {
   if value < lo {
     lo
   } else if value > hi {
@@ -103,7 +99,7 @@ let clamp = (lo: int, hi: int, value: int): int => {
 }
 
 /** Integer exponentiation with overflow detection */
-let rec powChecked = (base: int, exp: int): option<int> => {
+pub fn powChecked(base: Int, exp: Int) -> Option<Int> {
   if exp < 0 {
     None
   } else if exp == 0 {
@@ -111,12 +107,12 @@ let rec powChecked = (base: int, exp: int): option<int> => {
   } else if exp == 1 {
     Some(base)
   } else {
-    switch powChecked(base, exp / 2) {
-    | None => None
-    | Some(half) =>
-      switch mulChecked(half, half) {
-      | None => None
-      | Some(squared) =>
+    match powChecked(base, exp / 2) {
+     None => None
+     Some(half) =>
+      match mulChecked(half, half) {
+       None => None
+       Some(squared) =>
         if mod(exp, 2) == 0 {
           Some(squared)
         } else {
@@ -128,57 +124,57 @@ let rec powChecked = (base: int, exp: int): option<int> => {
 }
 
 /** Calculate percentage safely */
-let percentOf = (percent: int, total: int): option<int> => {
-  switch mulChecked(percent, total) {
-  | None => None
-  | Some(product) => div(product, 100)
+pub fn percentOf(percent: Int, total: Int) -> Option<Int> {
+  match mulChecked(percent, total) {
+   None => None
+   Some(product) => div(product, 100)
   }
 }
 
 /** Calculate what percentage part is of whole */
-let asPercent = (part: int, whole: int): option<int> => {
-  switch mulChecked(part, 100) {
-  | None => None
-  | Some(scaled) => div(scaled, whole)
+pub fn asPercent(part: Int, whole: Int) -> Option<Int> {
+  match mulChecked(part, 100) {
+   None => None
+   Some(scaled) => div(scaled, whole)
   }
 }
 
 /** Check if a value is within a range [lo, hi] (inclusive) */
-let inRange = (value: int, lo: int, hi: int): bool => {
+pub fn inRange(value: Int, lo: Int, hi: Int) -> Bool {
   value >= lo && value <= hi
 }
 
 /** Check if a value is within a range, excluding specific values */
-let inRangeExcluding = (value: int, lo: int, hi: int, excluded: array<int>): bool => {
+pub fn inRangeExcluding(value: Int, lo: Int, hi: Int, excluded: [Int]) -> Bool {
   if !inRange(value, lo, hi) {
     false
   } else {
-    !Array.some(excluded, e => e == value)
+    !Array::some(excluded, e => e == value)
   }
 }
 
-/** Safe integer parsing from string, returns None on invalid input */
-let fromString = (str: string): option<int> => {
-  let trimmed = String.trim(str)
-  if String.length(trimmed) == 0 {
+/** Safe integer parsing from String, returns None on invalid input */
+pub fn fromString(str: String) -> Option<Int> {
+  let trimmed = String::trim(str);
+  if String::length(trimmed) == 0 {
     None
   } else {
     // Check for valid integer format
-    let isValid = RegExp.test(%re("/^-?\\d+$/"), trimmed)
+    let isValid = RegExp::test(%re("/^-?\\d+$/"), trimmed);
     if !isValid {
       None
     } else {
-      let parsed = Int.fromString(trimmed)
+      let parsed = Int::fromString(trimmed);
       parsed
     }
   }
 }
 
 /** Safe integer parsing with range validation */
-let fromStringInRange = (str: string, lo: int, hi: int): option<int> => {
-  switch fromString(str) {
-  | None => None
-  | Some(value) =>
+pub fn fromStringInRange(str: String, lo: Int, hi: Int) -> Option<Int> {
+  match fromString(str) {
+   None => None
+   Some(value) =>
     if inRange(value, lo, hi) {
       Some(value)
     } else {
@@ -186,5 +182,3 @@ let fromStringInRange = (str: string, lo: int, hi: int): option<int> => {
     }
   }
 }
-
-======================================== */
