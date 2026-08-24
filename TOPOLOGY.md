@@ -9,12 +9,12 @@
 ```
                         ┌─────────────────────────────────────────┐
                         │              USER / CLIENT              │
-                        │        (ReScript TEA UI / CLI)          │
+                        │        (AffineScript TEA UI / CLI)          │
                         └───────────────────┬─────────────────────┘
                                             │
                                             ▼
                         ┌─────────────────────────────────────────┐
-                        │           NEURAL LAYER (RESCRIPT)       │
+                        │           NEURAL LAYER (AFFINESCRIPT)       │
                         │    (TEA Architecture, Intent Routing)   │
                         └──────────┬───────────────────┬──────────┘
                                    │                   │
@@ -52,7 +52,7 @@ COMPONENT                          STATUS              NOTES
 ─────────────────────────────────  ──────────────────  ─────────────────────────────────
 CORE LAYERS
   Forth Kernel (Physical)           ██████████ 100%    Byte-level striker stable
-  ReScript TEA UI (Neural)          ████████░░  80%    Real-time stack monitor active
+  AffineScript TEA UI (Neural)          ████████░░  80%    Real-time stack monitor active
   Nickel Contracts (Symbolic)       ██████████ 100%    Constraint validation verified
   Tauri Bridge (FFI)                ██████████ 100%    Type-safe OS integration stable
 

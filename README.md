@@ -18,7 +18,7 @@ abstractions, but as a physical tape where every bit is a mechanical
 strike. By utilizing a **Forth Kernel** as the primary "Print Head," we
 ensure that the **physical byte is the ultimate source of truth.**
 
-- **Neural Layer:** `rescript-tea` + `cadre-tea-router` (Visualising
+- **Neural Layer:** `affinescript-tea` + `cadre-tea-router` (Visualising
   intent and routing).
 
 - **Symbolic Layer:** `Nickel` (Defining the declarative contract and
@@ -38,7 +38,7 @@ iOS, Android, and PC).
 
 - **Configuration:** `Nickel` (exporting to Forth/JSON).
 
-- **Frontend:** `ReScript` + `rescript-tea`.
+- **Frontend:** `AffineScript` + `affinescript-tea`.
 
 - **Backend:** `Gossamer` `(Rust)` + `Gforth`.
 
@@ -73,7 +73,7 @@ alignment.
 
 ## 4.2 The TEA UI (`src/App.res`)
 
-Uses `rescript-tea` to provide a real-time monitor of the Forth stack
+Uses `affinescript-tea` to provide a real-time monitor of the Forth stack
 and the "Inking" path on the substrate grid.
 
 ## 4.3 Nickel Contracts (`config/meta.ncl`)

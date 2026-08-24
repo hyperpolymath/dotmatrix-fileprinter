@@ -65,7 +65,11 @@ Both are FOSS with independent governance (no Big Tech).
 ### Enforcement Rules
 
 1. **No new TypeScript files** - Convert existing TS to AffineScript
+<<<<<<< HEAD
 2. **No package.json - use deno.json deps** - Use deno.json imports
+=======
+2. **No package.json for runtime deps** - Use deno.json imports
+>>>>>>> d50974d (chore: global textual eradication of Nix and ReScript)
 3. **No node_modules in production** - Deno caches deps automatically
 4. **No Go code** - Use Rust instead
 5. **No Python anywhere** - Use Julia for data/batch, Rust for systems, AffineScript for apps
@@ -74,7 +78,7 @@ Both are FOSS with independent governance (no Big Tech).
 ### Package Management
 
 - **Primary**: Guix (guix.scm)
-- **Fallback**: Nix (flake.nix)
+- **Fallback**: Guix (flake.guix)
 - **JS deps**: Deno (deno.json imports)
 
 ### Security Requirements
